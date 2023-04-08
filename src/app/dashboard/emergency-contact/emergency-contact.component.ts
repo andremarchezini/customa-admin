@@ -1,8 +1,7 @@
 import { EmergencyContact } from './../../shared/models/emergency-contact';
 import { ConnectService } from './../../shared/connect/connect.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { MyErrorStateMatcher } from '../../register/register.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 import { filterErrors } from '../../../util';
@@ -13,6 +12,8 @@ import { filterErrors } from '../../../util';
   styleUrls: ['./emergency-contact.component.scss'],
 })
 export class EmergencyContactComponent implements OnInit {
+  @Input() id: number | null = null;
+
   FirstName = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
   LastName = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
   HomePhone = new FormControl(null, [Validators.required, Validators.maxLength(11)]);
@@ -41,7 +42,10 @@ export class EmergencyContactComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const contact = await this.connectSvc.get<EmergencyContact>('EmergencyContact', true);
+    const contact = await this.connectSvc.get<EmergencyContact>(
+      `EmergencyContact/${this.id}`,
+      true,
+    );
     this.form.setValue({
       FirstName: contact.firstName,
       LastName: contact.lastName,
@@ -57,7 +61,7 @@ export class EmergencyContactComponent implements OnInit {
   async onSubmit() {
     if (this.form.valid) {
       try {
-        await this.connectSvc.update('EmergencyContact', this.form.getRawValue(), true);
+        await this.connectSvc.update(`EmergencyContact/${this.id}`, this.form.getRawValue(), true);
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
           title: 'Success',

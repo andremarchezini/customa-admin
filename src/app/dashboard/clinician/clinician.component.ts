@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MyErrorStateMatcher } from '../../register/register.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -15,6 +15,8 @@ import { filterErrors } from '../../../util';
   styleUrls: ['./clinician.component.scss'],
 })
 export class ClinicianComponent {
+  @Input() id: number | null = null;
+
   FirstName = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
   LastName = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
   ProviderNumber = new FormControl(null, [Validators.required, Validators.maxLength(20)]);
@@ -65,7 +67,7 @@ export class ClinicianComponent {
   async ngOnInit() {
     this.states = await this.connectSvc.get<State[]>('State', false);
     this.countries = await this.connectSvc.get<Country[]>('Country', false);
-    const clinician = await this.connectSvc.get<Clinician>('Clinician', true);
+    const clinician = await this.connectSvc.get<Clinician>(`Clinician/${this.id}`, true);
     this.form.setValue({
       FirstName: clinician.firstName,
       LastName: clinician.lastName,
@@ -86,7 +88,7 @@ export class ClinicianComponent {
   async onSubmit() {
     if (this.form.valid) {
       try {
-        await this.connectSvc.update('Clinician', this.form.getRawValue(), true);
+        await this.connectSvc.update(`Clinician/${this.id}`, this.form.getRawValue(), true);
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
           title: 'Success',

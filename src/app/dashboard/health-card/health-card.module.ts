@@ -39,6 +39,7 @@ import { LoadingModule } from '../../shared/loading/loading.module';
     NgxMaskModule.forRoot(),
     LoadingModule,
   ],
+  exports: [HealthCardComponent],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-AU' }],
 })
 export class HealthCardModule {}

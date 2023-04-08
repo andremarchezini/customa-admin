@@ -39,6 +39,7 @@ import { LoadingModule } from '../../shared/loading/loading.module';
     NgxMaskModule.forRoot(),
     LoadingModule,
   ],
+  exports: [EmergencyContactComponent],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-AU' }],
 })
 export class EmergencyContactModule {}

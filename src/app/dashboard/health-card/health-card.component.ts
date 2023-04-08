@@ -1,5 +1,5 @@
 import { expire } from '../../shared/validators/medicare.validator';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MyErrorStateMatcher } from '../../register/register.component';
 import { AccountType } from '../../shared/models/account-type';
@@ -45,6 +45,8 @@ export const MY_FORMATS = {
   ],
 })
 export class HealthCardComponent {
+  @Input() id: number | null = null;
+
   get medicareExpiryError() {
     if (this.MedicareExpiry.hasError('required')) {
       return 'You must enter a value';
@@ -116,7 +118,7 @@ export class HealthCardComponent {
   async ngOnInit() {
     this.dvaCardColours = await this.connectSvc.get<DvaCardColour[]>('DvaCardColour', false);
     this.accountTypes = await this.connectSvc.get<AccountType[]>('AccountType', false);
-    const card = await this.connectSvc.get<HealthCard>('HealthCard', true);
+    const card = await this.connectSvc.get<HealthCard>(`HealthCard/${this.id}`, true);
     this.form.setValue({
       AccountTypeId: card.accountType ? card.accountType.id : null,
       AccountHolderName: card.accountHolderName,
@@ -124,7 +126,7 @@ export class HealthCardComponent {
       IhiNumber: card.ihiNumber,
       IhiRecordStatus: card.ihiRecordStatus,
       MedicareNumber: card.medicareNumber,
-      MedicareExpiry: card.medicareExpiry,
+      MedicareExpiry: _moment(card.medicareExpiry),
       PrivateFundName: card.privateFundName,
       PrivateFundMembershipNumber: card.privateFundMembershipNumber,
       DvaNumber: card.dvaNumber,
@@ -137,11 +139,12 @@ export class HealthCardComponent {
 
   async onSubmit() {
     const value = this.form.getRawValue();
-    if (value.MedicareExpiry) value.MedicareExpiry = value.MedicareExpiry.toISOString();
     console.log(value);
+    if (value.MedicareExpiry) value.MedicareExpiry = value.MedicareExpiry.toISOString();
+
     if (this.form.valid) {
       try {
-        await this.connectSvc.update('HealthCard', this.form.getRawValue(), true);
+        await this.connectSvc.update(`HealthCard/${this.id}`, this.form.getRawValue(), true);
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
           title: 'Success',

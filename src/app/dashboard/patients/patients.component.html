@@ -1,0 +1,43 @@
+<app-loading *ngIf="loading"></app-loading>
+
+<mat-card *ngIf="!loading">
+  <mat-card-content>
+    <mat-card-title>Profile</mat-card-title>
+    <div class="responsive-table">
+      <mat-table #table [dataSource]="dataSource">
+        <!-- Position Column -->
+        <ng-container matColumnDef="firstName">
+          <mat-header-cell *matHeaderCellDef> First Name </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{ element.firstName }} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="lastName">
+          <mat-header-cell *matHeaderCellDef> Last Name </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{ element.lastName }} </mat-cell>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="email">
+          <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{ element.email }} </mat-cell>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="mobile">
+          <mat-header-cell *matHeaderCellDef> Mobile </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{ element.mobile }} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          (click)="open(row)"
+          tappable
+        ></mat-row>
+      </mat-table>
+
+      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"> </mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

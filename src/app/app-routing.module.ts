@@ -41,6 +41,16 @@ const routes: Routes = [
         loadChildren: () => import('./dashboard/home/home.module').then((m) => m.HomeModule),
       },
       {
+        path: 'dashboard/patients',
+        loadChildren: () =>
+          import('./dashboard/patients/patients.module').then((m) => m.PatientsModule),
+      },
+      {
+        path: 'dashboard/patient/:id',
+        loadChildren: () =>
+          import('./dashboard/patient/patient.module').then((m) => m.PatientModule),
+      },
+      {
         path: 'dashboard/profile',
         loadChildren: () =>
           import('./dashboard/profile/profile.module').then((m) => m.ProfileModule),

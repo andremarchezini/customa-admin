@@ -3,7 +3,7 @@ import { State } from './../../shared/models/state';
 import { MaritalStatus } from './../../shared/models/marital-status';
 import { ConnectService } from './../../shared/connect/connect.service';
 import { Title } from './../../shared/models/title';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MyErrorStateMatcher } from '../../register/register.component';
 import { Gender } from '../../shared/models/gender';
@@ -18,6 +18,8 @@ import { filterErrors } from '../../../util';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
+  @Input() id: number | null = null;
+
   get dateOfBirthError() {
     if (this.DateOfBirth.hasError('required')) {
       return 'You must select a value';
@@ -93,7 +95,7 @@ export class ProfileComponent implements OnInit {
     this.genders = await this.connectSvc.get<Gender[]>('Gender', false);
     this.states = await this.connectSvc.get<State[]>('State', false);
     this.countries = await this.connectSvc.get<Country[]>('Country', false);
-    const profile = await this.connectSvc.get<Profile>('Profile', true);
+    const profile = await this.connectSvc.get<Profile>(`Profile/${this.id}`, true);
     this.form.setValue({
       TitleId: profile.title.id,
       FirstName: profile.firstName,
@@ -122,7 +124,7 @@ export class ProfileComponent implements OnInit {
     this.errors = [];
     if (this.form.valid) {
       try {
-        await this.connectSvc.update('Profile', this.form.getRawValue(), true);
+        await this.connectSvc.update(`Profile/${this.id}`, this.form.getRawValue(), true);
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
           title: 'Success',

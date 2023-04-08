@@ -33,33 +33,15 @@ export interface Menu {
 const MENUITEMS = [
   {
     state: '',
-    name: 'Personal',
+    name: 'Admin',
     type: 'separator',
     icon: 'av_timer',
   },
   {
-    state: 'dashboard/profile',
-    name: 'Profile',
+    state: 'dashboard/patients',
+    name: 'Patients',
     type: 'link',
     icon: 'account_box',
-  },
-  {
-    state: 'dashboard/emergency-contact',
-    name: 'Emergency Contact',
-    type: 'link',
-    icon: 'contact_emergency',
-  },
-  {
-    state: 'dashboard/health-card',
-    name: 'Health Card',
-    type: 'link',
-    icon: 'credit_card',
-  },
-  {
-    state: 'dashboard/clinician',
-    name: 'Clinician',
-    type: 'link',
-    icon: 'medical_services',
   },
 ];
 
