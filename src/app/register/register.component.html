@@ -1,0 +1,123 @@
+<div class="register">
+  <div class="register-box">
+    <mat-card>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="text-center">
+            <img alt="homepage" src="assets/images/logo_tiny_notext.png" />
+            <h4 class="m-t-0">Register</h4>
+          </div>
+          <div fxLayout="row flex-layout" fxLayoutGap="20px">
+            <!-- col full-->
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <mat-form-field appearance="fill">
+                <mat-label>Title</mat-label>
+                <mat-select [formControl]="TitleId" [errorStateMatcher]="matcher">
+                  <mat-option *ngFor="let titleOption of titles" [value]="titleOption.id">{{
+                    titleOption.name
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <small *ngIf="TitleId.invalid && TitleId.touched" class="text-danger support-text">{{
+                titleError
+              }}</small>
+            </div>
+            <!-- col full-->
+            <div fxFlex.gt-sm="calc(33%-20px)" fxFlex="100">
+              <mat-form-field>
+                <input matInput placeholder="First Name" type="text" [formControl]="FirstName" />
+              </mat-form-field>
+              <small
+                *ngIf="FirstName.invalid && FirstName.touched"
+                class="text-danger support-text"
+                >{{ firstNameError }}</small
+              >
+            </div>
+            <!-- col full-->
+            <div fxFlex.gt-sm="calc(33%-20px)" fxFlex="100">
+              <mat-form-field>
+                <input matInput placeholder="Middle Name" type="text" [formControl]="MiddleName" />
+              </mat-form-field>
+              <small
+                *ngIf="MiddleName.invalid && MiddleName.touched"
+                class="text-danger support-text"
+                >{{ middleNameError }}</small
+              >
+            </div>
+            <!-- col full-->
+            <div fxFlex.gt-sm="calc(33%-20px)" fxFlex="100">
+              <mat-form-field>
+                <input matInput placeholder="Last Name" type="text" [formControl]="LastName" />
+              </mat-form-field>
+              <small
+                *ngIf="LastName.invalid && LastName.touched"
+                class="text-danger support-text"
+                >{{ lastNameError }}</small
+              >
+            </div>
+            <!-- col full-->
+            <div fxFlex.gt-sm="47" fxFlex.gt-xs="100" fxFlex="100">
+              <mat-form-field>
+                <input matInput placeholder="Email" type="email" [formControl]="Email" />
+              </mat-form-field>
+              <small *ngIf="Email.invalid && Email.touched" class="text-danger support-text">{{
+                emailError
+              }}</small>
+            </div>
+
+            <!-- col full-->
+            <div fxFlex.gt-sm="47" fxFlex.gt-xs="100" fxFlex="100">
+              <mat-form-field>
+                <input
+                  matInput
+                  [type]="hide ? 'password' : 'text'"
+                  placeholder="Password"
+                  [formControl]="Password"
+                />
+                <mat-icon matSuffix (click)="hide = !hide">{{
+                  hide ? 'visibility_off' : 'visibility'
+                }}</mat-icon>
+              </mat-form-field>
+              <small
+                *ngIf="Password.invalid && Password.touched"
+                class="text-danger support-text"
+                >{{ passwordError }}</small
+              >
+            </div>
+            <!-- col full-->
+            <!-- TODO -->
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <mat-checkbox class="font-14"
+                >I agree to the all
+                <a href="javascript:void(0)" class="link text-info">terms</a>.</mat-checkbox
+              >
+            </div>
+            <div *ngIf="errors.length > 0" class="text-danger">
+              <ul>
+                <li *ngFor="let error of errors">
+                  {{ error }}
+                </li>
+              </ul>
+            </div>
+            <button
+              mat-raised-button
+              color="primary"
+              class="btn-block btn-lg m-t-20 m-b-20"
+              type="submit"
+              [disabled]="!form.valid"
+            >
+              Create your account
+            </button>
+
+            <div class="text-center" fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <span
+                >Already have an account?
+                <a [routerLink]="['/login']" class="link text-info"> Login</a>
+              </span>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="login">
+  <div class="login-box">
+    <mat-card>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="text-center">
+            <img alt="homepage" src="assets/images/logo_tiny_notext.png" />
+            <h4 class="m-t-0">Recover Password</h4>
+          </div>
+          <p class="text-center font-14">
+            Enter your email and we'll send you the password reset link.
+          </p>
+          <div fxLayout="row wrap">
+            <!-- col full-->
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <mat-form-field>
+                <input matInput placeholder="Email" type="email" [formControl]="email" />
+              </mat-form-field>
+              <small *ngIf="email.invalid && email.touched" class="text-danger support-text">{{
+                emailError
+              }}</small>
+            </div>
+
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              class="btn-block btn-lg m-t-20"
+              [disabled]="!form.valid"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

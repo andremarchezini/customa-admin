@@ -1,0 +1,93 @@
+<app-loading *ngIf="loading"></app-loading>
+
+<mat-card *ngIf="!loading">
+  <mat-card-content>
+    <mat-card-title>Emergency Contact</mat-card-title>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="basic-form">
+      <div fxLayout="row flex-layout">
+        <div fxFlex="100">
+          <mat-form-field>
+            <input matInput placeholder="First Name" type="text" [formControl]="FirstName" />
+          </mat-form-field>
+          <small *ngIf="FirstName.invalid && FirstName.touched" class="text-danger support-text">{{
+            textFieldError(FirstName)
+          }}</small>
+        </div>
+
+        <div fxFlex="100">
+          <mat-form-field>
+            <input matInput placeholder="Last Name" type="text" [formControl]="LastName" />
+          </mat-form-field>
+          <small *ngIf="LastName.invalid && LastName.touched" class="text-danger support-text">{{
+            textFieldError(LastName)
+          }}</small>
+        </div>
+
+        <div fxFlex="100">
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Home Phone (08 XXXX XXXX)"
+              type="text"
+              [formControl]="HomePhone"
+              mask="99 9999 9999"
+            />
+          </mat-form-field>
+          <small *ngIf="HomePhone.invalid && HomePhone.touched" class="text-danger support-text">{{
+            textFieldError(HomePhone)
+          }}</small>
+        </div>
+
+        <div fxFlex="100">
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Mobile (04X XXX XXXX)"
+              type="text"
+              [formControl]="Mobile"
+              mask="999 999 9999"
+            />
+          </mat-form-field>
+          <small *ngIf="Mobile.invalid && Mobile.touched" class="text-danger support-text">{{
+            textFieldError(Mobile)
+          }}</small>
+        </div>
+
+        <div fxFlex="100">
+          <mat-form-field>
+            <input matInput placeholder="Email" type="email" [formControl]="Email" />
+          </mat-form-field>
+          <small *ngIf="Email.invalid && Email.touched" class="text-danger support-text">{{
+            textFieldError(Email)
+          }}</small>
+        </div>
+
+        <div fxFlex="100">
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Relationship to Patient"
+              type="text"
+              [formControl]="RelationshipToPatient"
+            />
+          </mat-form-field>
+          <small
+            *ngIf="RelationshipToPatient.invalid && RelationshipToPatient.touched"
+            class="text-danger support-text"
+            >{{ textFieldError(RelationshipToPatient) }}</small
+          >
+        </div>
+        <div *ngIf="errors.length > 0" class="text-danger">
+          <ul>
+            <li *ngFor="let error of errors">
+              {{ error }}
+            </li>
+          </ul>
+        </div>
+        <div fxFlex="100">
+          <button mat-raised-button color="primary">Submit</button>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
