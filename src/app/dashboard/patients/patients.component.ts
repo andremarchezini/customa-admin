@@ -25,6 +25,13 @@ export class PatientsComponent implements OnInit {
 
   loading = false;
 
+  length = 0;
+  pageSize = 10;
+  pageIndex = 0;
+  pageSizeOptions = [5, 10, 25];
+
+  @ViewChild('paginator') paginator: MatPaginator | null = null;
+
   constructor(
     breakpointObserver: BreakpointObserver,
     private connectSvc: ConnectService,
@@ -38,15 +45,24 @@ export class PatientsComponent implements OnInit {
     });
   }
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
-
   async ngAfterViewInit() {
-    this.dataSource.data = await this.connectSvc.get<Patient[]>('Patient', true);
-    this.changeDetectorRefs.detectChanges();
+    await this.loadData();
     this.dataSource.paginator = this.paginator;
   }
 
   async ngOnInit() {}
+
+  search(event: Event) {
+    this.loadData((event.target as HTMLInputElement).value);
+  }
+
+  async loadData(query?: string | null | undefined) {
+    this.dataSource.data = await this.connectSvc.get<Patient[]>(
+      query ? `Patient?keyword=${query}` : 'Patient',
+      true,
+    );
+    this.length = this.dataSource.data.length;
+  }
 
   open(patient: Patient) {
     this.router.navigateByUrl(`dashboard/patient/${patient.id}`);

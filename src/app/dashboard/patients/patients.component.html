@@ -2,7 +2,10 @@
 
 <mat-card *ngIf="!loading">
   <mat-card-content>
-    <mat-card-title>Profile</mat-card-title>
+    <mat-card-title>Patients</mat-card-title>
+    <mat-form-field>
+      <input matInput (keyup)="search($event)" placeholder="Search (Filter)" />
+    </mat-form-field>
     <div class="responsive-table">
       <mat-table #table [dataSource]="dataSource">
         <!-- Position Column -->
@@ -36,8 +39,14 @@
           tappable
         ></mat-row>
       </mat-table>
-
-      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"> </mat-paginator>
+      <!-- TODO PAGINATION -->
+      <mat-paginator
+        #paginator
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="pageSizeOptions"
+      >
+      </mat-paginator>
     </div>
   </mat-card-content>
 </mat-card>
