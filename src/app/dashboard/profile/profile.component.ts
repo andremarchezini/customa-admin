@@ -4,13 +4,30 @@ import { MaritalStatus } from './../../shared/models/marital-status';
 import { ConnectService } from './../../shared/connect/connect.service';
 import { Title } from './../../shared/models/title';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { MyErrorStateMatcher } from '../../register/register.component';
+import {
+  FormControl,
+  Validators,
+  FormGroup,
+  FormBuilder,
+  FormGroupDirective,
+  NgForm,
+} from '@angular/forms';
 import { Gender } from '../../shared/models/gender';
 import { Country } from '../../shared/models/country';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 import { filterErrors } from '../../../util';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { MapsService } from '../../shared/maps/maps.service';
+import { Place, PlaceSearch } from '../../shared/models/maps';
+
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-profile',
@@ -33,6 +50,7 @@ export class ProfileComponent implements OnInit {
   states: State[] = [];
   countries: Country[] = [];
   errors: string[] = [];
+  places: PlaceSearch[] = [];
 
   TitleId = new FormControl(null, [Validators.required]);
   FirstName = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
@@ -47,11 +65,11 @@ export class ProfileComponent implements OnInit {
   HomePhone = new FormControl(null, [Validators.required, Validators.maxLength(11)]);
   WorkPhone = new FormControl(null, [Validators.maxLength(11)]);
   Mobile = new FormControl(null, [Validators.maxLength(11)]);
-  Address = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
-  AddressExtra = new FormControl(null, [Validators.maxLength(100)]);
-  Suburb = new FormControl(null, [Validators.required, Validators.maxLength(50)]);
-  StateId = new FormControl(null, [Validators.required]);
-  CountryId = new FormControl({ value: 'AU', disabled: true }, [
+  Address = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(100)]);
+  AddressExtra = new FormControl<null | string>(null, [Validators.maxLength(100)]);
+  Suburb = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(50)]);
+  StateId = new FormControl<null | string>(null, [Validators.required]);
+  CountryId = new FormControl<null | string>({ value: 'AU', disabled: true }, [
     Validators.required,
     Validators.maxLength(3),
   ]);
@@ -66,6 +84,7 @@ export class ProfileComponent implements OnInit {
     private formBuilder: FormBuilder,
     private connectSvc: ConnectService,
     private dialog: MatDialog,
+    private mapsService: MapsService,
   ) {
     this.form = this.formBuilder.group({
       TitleId: this.TitleId,
@@ -160,5 +179,37 @@ export class ProfileComponent implements OnInit {
       return 'Your selection is invalid';
     }
     return null;
+  }
+
+  async search() {
+    const places = await this.mapsService.search(this.Address.value!);
+    if (places) this.places = places;
+    else this.places = [];
+    console.log(this.places);
+  }
+
+  async getPlace(placeId: string) {
+    this.places = [];
+    const place = await this.mapsService.getPlace(placeId);
+    this.setPlace(place);
+  }
+
+  setPlace(place: Place) {
+    if (place) {
+      if (place.countryId == 'AU') {
+        this.Address.setValue(place.address);
+        this.AddressExtra.setValue(null);
+        this.Suburb.setValue(place.suburb);
+        this.StateId.setValue(place.stateId);
+        this.CountryId.setValue(place.countryId);
+      } else {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.data = {
+          title: 'Error',
+          message: 'Country not allowed',
+        };
+        this.dialog.open(DialogComponent, dialogConfig);
+      }
+    }
   }
 }

@@ -43,7 +43,7 @@ export class ForgotComponent implements OnInit {
     });
   }
 
-  //TODO
+  //TODO FORGOT PASSWORD FROM PORTAL
 
   ngOnInit(): void {}
 

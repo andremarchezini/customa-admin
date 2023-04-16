@@ -1,13 +1,24 @@
 import { expire } from '../../shared/validators/medicare.validator';
 import { Component, Input } from '@angular/core';
-import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { MyErrorStateMatcher } from '../../register/register.component';
+import {
+  FormControl,
+  Validators,
+  FormGroup,
+  FormBuilder,
+  FormGroupDirective,
+  NgForm,
+} from '@angular/forms';
 import { AccountType } from '../../shared/models/account-type';
 import { DvaCardColour } from '../../shared/models/dva-card-colour';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConnectService } from '../../shared/connect';
 import { HealthCard } from '../../shared/models/health-card';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import {
+  DateAdapter,
+  ErrorStateMatcher,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
@@ -29,6 +40,14 @@ export const MY_FORMATS = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
+
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-health-card',

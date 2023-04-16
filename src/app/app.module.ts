@@ -30,6 +30,7 @@ import { DialogComponent } from './shared/dialog/dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { QuestionDialogComponent } from './shared/question-dialog/question-dialog.component';
 import { ExpiredTokenInterceptor } from './shared/interceptors/expired-token.interceptor';
+import { MapsModule } from './shared/maps/maps.module';
 
 export function HttpLoaderFactory(http: HttpClient): any {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -79,6 +80,7 @@ const maskConfigFunction: () => Partial<IConfig> = () => {
     HttpClientModule,
     AuthenticationModule,
     ConnectModule,
+    MapsModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

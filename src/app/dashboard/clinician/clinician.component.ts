@@ -1,6 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { MyErrorStateMatcher } from '../../register/register.component';
+import {
+  FormControl,
+  Validators,
+  FormGroup,
+  FormBuilder,
+  FormGroupDirective,
+  NgForm,
+} from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConnectService } from '../../shared/connect';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
@@ -8,6 +14,17 @@ import { Clinician } from '../../shared/models/clinician';
 import { Country } from '../../shared/models/country';
 import { State } from '../../shared/models/state';
 import { filterErrors } from '../../../util';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { MapsService } from '../../shared/maps/maps.service';
+import { Place, PlaceSearch } from '../../shared/models/maps';
+
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-clinician',
@@ -21,10 +38,10 @@ export class ClinicianComponent {
   LastName = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
   ProviderNumber = new FormControl(null, [Validators.required, Validators.maxLength(20)]);
   PracticeName = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
-  Address = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
-  AddressExtra = new FormControl(null, [Validators.maxLength(100)]);
-  Suburb = new FormControl(null, [Validators.required, Validators.maxLength(50)]);
-  StateId = new FormControl(null, [Validators.required, Validators.maxLength(3)]);
+  Address = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(100)]);
+  AddressExtra = new FormControl<null | string>(null, [Validators.maxLength(100)]);
+  Suburb = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(50)]);
+  StateId = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(3)]);
   CountryId = new FormControl({ value: 'AU', disabled: true }, [
     Validators.required,
     Validators.maxLength(3),
@@ -36,6 +53,7 @@ export class ClinicianComponent {
   states: State[] = [];
   countries: Country[] = [];
   errors: string[] = [];
+  places: PlaceSearch[] = [];
 
   matcher = new MyErrorStateMatcher();
 
@@ -47,6 +65,7 @@ export class ClinicianComponent {
     private formBuilder: FormBuilder,
     private connectSvc: ConnectService,
     private dialog: MatDialog,
+    private mapsService: MapsService,
   ) {
     this.form = this.formBuilder.group({
       FirstName: this.FirstName,
@@ -124,5 +143,37 @@ export class ClinicianComponent {
       return 'Your selection is invalid';
     }
     return null;
+  }
+
+  async search() {
+    const places = await this.mapsService.search(this.Address.value!);
+    if (places) this.places = places;
+    else this.places = [];
+    console.log(this.places);
+  }
+
+  async getPlace(placeId: string) {
+    this.places = [];
+    const place = await this.mapsService.getPlace(placeId);
+    this.setPlace(place);
+  }
+
+  setPlace(place: Place) {
+    if (place) {
+      if (place.countryId == 'AU') {
+        this.Address.setValue(place.address);
+        this.AddressExtra.setValue(null);
+        this.Suburb.setValue(place.suburb);
+        this.StateId.setValue(place.stateId);
+        this.CountryId.setValue(place.countryId);
+      } else {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.data = {
+          title: 'Error',
+          message: 'Country not allowed',
+        };
+        this.dialog.open(DialogComponent, dialogConfig);
+      }
+    }
   }
 }

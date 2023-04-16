@@ -63,12 +63,28 @@
         </div>
         <div fxFlex="100">
           <mat-form-field>
-            <input matInput placeholder="Clinician Address" type="text" [formControl]="Address" />
+            <input
+              matInput
+              placeholder="Clinician Address"
+              type="text"
+              (keyup)="search()"
+              [formControl]="Address"
+            />
           </mat-form-field>
           <small *ngIf="Address.invalid && Address.touched" class="text-danger support-text">{{
             textFieldError(Address)
           }}</small>
         </div>
+        <div>
+          <div
+            *ngFor="let place of places"
+            (click)="getPlace(place.placeId)"
+            class="p-t-5 p-b-5 cursor-pointer"
+          >
+            {{ place.formattedAddress }}
+          </div>
+        </div>
+
         <div fxFlex="100">
           <mat-form-field>
             <input
