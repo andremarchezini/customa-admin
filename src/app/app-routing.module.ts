@@ -13,9 +13,10 @@ const routes: Routes = [
     path: 'forgot',
     loadChildren: () => import('./forgot/forgot.module').then((m) => m.ForgotModule),
   },
+
   {
-    path: 'two-factor',
-    loadChildren: () => import('./two-factor/two-factor.module').then((m) => m.TwoFactorModule),
+    path: 'reset',
+    loadChildren: () => import('./reset/reset.module').then((m) => m.ResetModule),
   },
   {
     path: '',
@@ -24,12 +25,12 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/dashboard/home',
+        redirectTo: '/dashboard/patients',
         pathMatch: 'full',
       },
       {
         path: 'dashboard',
-        redirectTo: '/dashboard/home',
+        redirectTo: '/dashboard/patients',
         pathMatch: 'full',
       },
       {

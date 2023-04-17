@@ -1,9 +1,8 @@
-import { NgxMaskModule } from 'ngx-mask';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TwoFactorRoutingModule } from './two-factor-routing.module';
-import { TwoFactorComponent } from './two-factor.component';
+import { ResetRoutingModule } from './reset-routing.module';
+import { ResetComponent } from './reset.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -14,10 +13,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
 @NgModule({
-  declarations: [TwoFactorComponent],
+  declarations: [ResetComponent],
   imports: [
     CommonModule,
-    TwoFactorRoutingModule,
+    ResetRoutingModule,
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
@@ -28,7 +27,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatCheckboxModule,
     MatButtonModule,
     FlexLayoutModule,
-    NgxMaskModule.forRoot(),
   ],
 })
-export class TwoFactorModule {}
+export class ResetModule {}

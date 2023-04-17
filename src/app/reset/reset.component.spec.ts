@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TwoFactorComponent } from './two-factor.component';
+import { ResetComponent } from './reset.component';
 
-describe('TwoFactorComponent', () => {
-  let component: TwoFactorComponent;
-  let fixture: ComponentFixture<TwoFactorComponent>;
+describe('ResetComponent', () => {
+  let component: ResetComponent;
+  let fixture: ComponentFixture<ResetComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TwoFactorComponent],
+      declarations: [ResetComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TwoFactorComponent);
+    fixture = TestBed.createComponent(ResetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

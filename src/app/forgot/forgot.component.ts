@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -8,8 +8,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { PasswordValidator } from '../shared/validators/password.validator';
-import { StringValidator } from '../shared/validators/string.validator';
+import { ConnectService } from '../shared/connect';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogComponent } from '../shared/dialog/dialog.component';
+import { Router } from '@angular/router';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -24,7 +26,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './forgot.component.html',
   styleUrls: ['./forgot.component.sass'],
 })
-export class ForgotComponent implements OnInit {
+export class ForgotComponent {
   get emailError() {
     if (this.email.hasError('required')) {
       return 'You must enter a value';
@@ -34,22 +36,41 @@ export class ForgotComponent implements OnInit {
   }
   email = new FormControl('', [Validators.required, Validators.email]);
   matcher = new MyErrorStateMatcher();
+  errors: string[] = [];
 
   public form: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
+    private connectSvc: ConnectService,
+    private router: Router,
+  ) {
     this.form = this.formBuilder.group({
       email: this.email,
     });
   }
 
-  //TODO FORGOT PASSWORD FROM PORTAL
-
-  ngOnInit(): void {}
-
-  getErrorMessage() {}
-
-  onSubmit(): void {
-    alert('submitted');
+  async onSubmit() {
+    try {
+      await this.connectSvc.create('authenticate/forgot', this.form.value, false);
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.data = {
+        title: 'Sent',
+        message:
+          "An email with the resent link has been sent. If you don't receive it please check the email address.",
+      };
+      const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(() => {
+        this.router.navigateByUrl('/login');
+      });
+    } catch (error: any) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.data = {
+        title: 'Error',
+        message: 'Something went wrong. Please try again.',
+      };
+      this.dialog.open(DialogComponent, dialogConfig);
+    }
   }
 }

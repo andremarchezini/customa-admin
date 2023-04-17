@@ -7,18 +7,35 @@
             <img alt="homepage" src="assets/images/logo_tiny_notext.png" />
             <h4 class="m-t-0">Recover Password</h4>
           </div>
-          <p class="text-center font-14">
-            Enter your email and we'll send you the password reset link.
-          </p>
+          <p class="text-center font-14">Enter your new password.</p>
           <div fxLayout="row wrap">
             <!-- col full-->
             <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
               <mat-form-field>
-                <input matInput placeholder="Email" type="email" [formControl]="email" />
+                <input matInput placeholder="Email" type="email" [formControl]="Email" />
               </mat-form-field>
-              <small *ngIf="email.invalid && email.touched" class="text-danger support-text">{{
+              <small *ngIf="Email.invalid && Email.touched" class="text-danger support-text">{{
                 emailError
               }}</small>
+            </div>
+            <!-- col full-->
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <mat-form-field>
+                <input
+                  matInput
+                  [type]="hide ? 'password' : 'text'"
+                  placeholder="Password"
+                  [formControl]="Password"
+                />
+                <mat-icon matSuffix (click)="hide = !hide">{{
+                  hide ? 'visibility_off' : 'visibility'
+                }}</mat-icon>
+              </mat-form-field>
+              <small
+                *ngIf="Password.invalid && Password.touched"
+                class="text-danger support-text"
+                >{{ passwordError }}</small
+              >
             </div>
             <div *ngIf="errors.length > 0" class="text-danger">
               <ul>

@@ -1,7 +1,7 @@
-import { AbstractControl, FormControl, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-export class PasswordValidator {
-  static strong(control: FormControl) {
+export function strong(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
     const hasNumber = /\d/.test(control.value);
     const hasUpper = /[A-Z]/.test(control.value);
     const hasLower = /[a-z]/.test(control.value);
@@ -11,14 +11,5 @@ export class PasswordValidator {
       return { strong: true };
     }
     return null;
-  }
-
-  static match(passwordFieldName: string, confirmPasswordFieldName: string): ValidatorFn {
-    return (form: AbstractControl) => {
-      if (form.get(passwordFieldName)!.value !== form.get(confirmPasswordFieldName)!.value) {
-        return { passwordNotMatched: true };
-      }
-      return null;
-    };
-  }
+  };
 }

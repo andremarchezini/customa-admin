@@ -10,7 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { PasswordValidator } from '../shared/validators/password.validator';
+import { strong } from '../shared/validators/password.validator';
 import { Auth } from '../shared/models/auth';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -53,13 +53,12 @@ export class LoginComponent {
   }
 
   email = new FormControl('', [Validators.required, Validators.email, Validators.maxLength(100)]);
-  password = new FormControl('', [
-    Validators.required,
-    PasswordValidator.strong,
-    Validators.maxLength(50),
-  ]);
+  password = new FormControl('', [Validators.required, strong(), Validators.maxLength(50)]);
+  otp = new FormControl('', []);
 
   hide = true;
+
+  show: 'login' | 'otp' = 'login';
 
   matcher = new MyErrorStateMatcher();
 
@@ -75,25 +74,58 @@ export class LoginComponent {
     this.form = this.formBuilder.group({
       email: this.email,
       password: this.password,
+      otp: this.otp,
     });
   }
+
+  //TODO TEST LOGIN
 
   getErrorMessage() {}
 
   async onSubmit() {
+    if (!this.form.value.otp) {
+      try {
+        await this.connectSvc.create<Auth>('authenticate/prelogin-admin', this.form.value, false);
+        this.show = 'otp';
+        this.email.disable();
+        this.password.disable();
+      } catch (error: any) {
+        if (error.error.message) {
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.data = {
+            title: 'Error',
+            message: error.error.message,
+          };
+          this.dialog.open(DialogComponent, dialogConfig);
+        } else {
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.data = {
+            title: 'Error',
+            message: 'Invalid login details',
+          };
+          this.dialog.open(DialogComponent, dialogConfig);
+        }
+      }
+    } else {
+      this.login();
+    }
+  }
+
+  async login() {
     try {
       const login = await this.connectSvc.create<Auth>(
         'authenticate/login-admin',
-        this.form.value,
+        this.form.getRawValue(),
         false,
       );
       this.authSvc.setToken(login.token);
       this.router.navigateByUrl('/dashboard');
+      // TODO CHECK UNCONFIRMED EMAIL
     } catch (error) {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {
         title: 'Error',
-        message: 'Invalid login details',
+        message: 'Invalid One-time Password',
       };
       this.dialog.open(DialogComponent, dialogConfig);
     }

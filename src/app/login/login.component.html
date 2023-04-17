@@ -5,11 +5,11 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="text-center">
             <img alt="homepage" src="assets/images/logo_tiny_notext.png" />
-            <h4 class="m-t-0">Register to Customa</h4>
+            <h4 class="m-t-0">Login to Customa</h4>
           </div>
           <div fxLayout="row wrap">
             <!-- col full-->
-            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100" *ngIf="show == 'login'">
               <mat-form-field>
                 <input
                   matInput
@@ -25,7 +25,7 @@
             </div>
 
             <!-- col full-->
-            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100" *ngIf="show == 'login'">
               <mat-form-field>
                 <input matInput type="password" placeholder="Password" [formControl]="password" />
               </mat-form-field>
@@ -34,6 +34,17 @@
                 class="text-danger support-text"
                 >{{ passwordError }}</small
               >
+            </div>
+            <!-- col full-->
+
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100" *ngIf="show == 'otp'">
+              <div class="text-center">
+                We have sent a one-time password to your email inbox. Please enter the 6-digit code
+                below.
+              </div>
+              <mat-form-field>
+                <input matInput type="text" placeholder="OTP" [formControl]="otp" />
+              </mat-form-field>
             </div>
             <!-- col half-->
             <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" class="text-right">
@@ -48,7 +59,7 @@
                 type="submit"
                 [disabled]="!form.valid"
               >
-                Login
+                {{ show === 'login' ? 'Send OTP' : 'Login' }}
               </button>
             </div>
             <!-- col full-->
