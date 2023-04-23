@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiURL: 'https://localhost:44337/api/',
+  apiURL: 'https://api.customa.com.au/api/',
 };
