@@ -36,7 +36,7 @@
         <mat-row
           *matRowDef="let row; columns: displayedColumns"
           (click)="open(row)"
-          tappable
+          class="cursor-pointer row-hover"
         ></mat-row>
       </mat-table>
       <mat-paginator
