@@ -35,6 +35,8 @@ export class ForgotComponent {
     return this.email.hasError('email') ? 'Not a valid email' : '';
   }
   email = new FormControl('', [Validators.required, Validators.email]);
+  origin = new FormControl(1, [Validators.required]);
+
   matcher = new MyErrorStateMatcher();
   errors: string[] = [];
 
@@ -48,6 +50,7 @@ export class ForgotComponent {
   ) {
     this.form = this.formBuilder.group({
       email: this.email,
+      origin: this.origin,
     });
   }
 
