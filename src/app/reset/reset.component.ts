@@ -74,7 +74,7 @@ export class ResetComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.Email.setValue(params.email);
-      this.token = params.token;
+      this.token = params.token.replaceAll(' ', '+');
     });
   }
 
