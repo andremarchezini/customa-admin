@@ -142,7 +142,7 @@ export class HealthCardComponent {
       IhiNumber: card.ihiNumber,
       IhiRecordStatus: card.ihiRecordStatus,
       MedicareNumber: card.medicareNumber,
-      MedicareExpiry: _moment(card.medicareExpiry),
+      MedicareExpiry: card.medicareExpiry ? _moment(card.medicareExpiry) : null,
       PrivateFundName: card.privateFundName,
       PrivateFundMembershipNumber: card.privateFundMembershipNumber,
       DvaNumber: card.dvaNumber,
