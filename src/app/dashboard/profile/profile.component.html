@@ -44,7 +44,7 @@
           </div>
           <div fxFlex.gt-sm="calc(33%-20px)" fxFlex="100">
             <mat-form-field>
-              <input matInput placeholder="Last Name" type="text" [formControl]="LastName" />
+              <input matInput placeholder="Surname" type="text" [formControl]="LastName" />
             </mat-form-field>
             <small *ngIf="LastName.invalid && LastName.touched" class="text-danger support-text">{{
               textFieldError(LastName)

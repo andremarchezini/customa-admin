@@ -95,15 +95,12 @@ export class HealthCardComponent {
     Validators.maxLength(7),
     expire(),
   ]);
-  PrivateFundName = new FormControl(null, [Validators.required, Validators.maxLength(50)]);
-  PrivateFundMembershipNumber = new FormControl(null, [
-    Validators.required,
-    Validators.maxLength(20),
-  ]);
-  DvaNumber = new FormControl(null, [Validators.required, Validators.maxLength(50)]);
-  DvaDisability = new FormControl(null, [Validators.required, Validators.maxLength(50)]);
-  DvaCardColourId = new FormControl(null, [Validators.required]);
-  HccPensionCardNumber = new FormControl(null, [Validators.required, Validators.maxLength(20)]);
+  PrivateFundName = new FormControl(null, [Validators.maxLength(50)]);
+  PrivateFundMembershipNumber = new FormControl(null, [Validators.maxLength(20)]);
+  DvaNumber = new FormControl(null, [Validators.maxLength(50)]);
+  DvaDisability = new FormControl(null, [Validators.maxLength(50)]);
+  DvaCardColourId = new FormControl(null, []);
+  HccPensionCardNumber = new FormControl(null, [Validators.maxLength(20)]);
   errors: string[] = [];
 
   public form: FormGroup;

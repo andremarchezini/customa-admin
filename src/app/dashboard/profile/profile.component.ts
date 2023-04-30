@@ -133,7 +133,7 @@ export class ProfileComponent implements OnInit {
       AddressExtra: profile.addressExtra,
       Suburb: profile.suburb,
       StateId: profile.state ? profile.state.id : null,
-      CountryId: 'AU',
+      CountryId: profile.country ? profile.country.id : null,
     });
 
     this.loading = false;
