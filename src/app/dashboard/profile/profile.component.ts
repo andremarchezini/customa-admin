@@ -62,9 +62,9 @@ export class ProfileComponent implements OnInit {
   MaritalStatusId = new FormControl(null, [Validators.required]);
   DateOfBirth = new FormControl(null, [Validators.required]);
   Gender = new FormControl(null, [Validators.required]);
-  HomePhone = new FormControl(null, [Validators.required, Validators.maxLength(11)]);
+  HomePhone = new FormControl(null, [Validators.maxLength(11)]);
   WorkPhone = new FormControl(null, [Validators.maxLength(11)]);
-  Mobile = new FormControl(null, [Validators.maxLength(11)]);
+  Mobile = new FormControl(null, [Validators.required, Validators.maxLength(11)]);
   Address = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(100)]);
   AddressExtra = new FormControl<null | string>(null, [Validators.maxLength(100)]);
   Suburb = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(50)]);
