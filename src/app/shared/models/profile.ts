@@ -1,5 +1,4 @@
 import { Country } from './country';
-import { State } from './state';
 import { Gender } from './gender';
 import { MaritalStatus } from './marital-status';
 import { Title } from './title';
@@ -23,7 +22,7 @@ export interface Profile {
   address: string | null;
   addressExtra: string | null;
   suburb: string | null;
-  state: State | null;
+  state: string | null;
   country: Country | null;
   emergencyContact: EmergencyContact;
 }

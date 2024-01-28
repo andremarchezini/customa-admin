@@ -1,5 +1,4 @@
 import { Profile } from './../../shared/models/profile';
-import { State } from './../../shared/models/state';
 import { MaritalStatus } from './../../shared/models/marital-status';
 import { ConnectService } from './../../shared/connect/connect.service';
 import { Title } from './../../shared/models/title';
@@ -47,7 +46,6 @@ export class ProfileComponent implements OnInit {
   titles: Title[] = [];
   maritalStatuses: MaritalStatus[] = [];
   genders: Gender[] = [];
-  states: State[] = [];
   countries: Country[] = [];
   errors: string[] = [];
   places: PlaceSearch[] = [];
@@ -62,17 +60,14 @@ export class ProfileComponent implements OnInit {
   MaritalStatusId = new FormControl(null, [Validators.required]);
   DateOfBirth = new FormControl(null, [Validators.required]);
   Gender = new FormControl(null, [Validators.required]);
-  HomePhone = new FormControl(null, [Validators.maxLength(11)]);
-  WorkPhone = new FormControl(null, [Validators.maxLength(11)]);
-  Mobile = new FormControl(null, [Validators.required, Validators.maxLength(11)]);
+  HomePhone = new FormControl(null, [Validators.maxLength(50)]);
+  WorkPhone = new FormControl(null, [Validators.maxLength(50)]);
+  Mobile = new FormControl(null, [Validators.required, Validators.maxLength(50)]);
   Address = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(100)]);
   AddressExtra = new FormControl<null | string>(null, [Validators.maxLength(100)]);
   Suburb = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(50)]);
-  StateId = new FormControl<null | string>(null, [Validators.required]);
-  CountryId = new FormControl<null | string>({ value: 'AU', disabled: true }, [
-    Validators.required,
-    Validators.maxLength(3),
-  ]);
+  State = new FormControl<null | string>(null, [Validators.required]);
+  CountryId = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(3)]);
 
   public form: FormGroup;
 
@@ -103,7 +98,7 @@ export class ProfileComponent implements OnInit {
       Address: this.Address,
       AddressExtra: this.AddressExtra,
       Suburb: this.Suburb,
-      StateId: this.StateId,
+      State: this.State,
       CountryId: this.CountryId,
     });
   }
@@ -112,7 +107,6 @@ export class ProfileComponent implements OnInit {
     this.titles = await this.connectSvc.get<Title[]>('Title', false);
     this.maritalStatuses = await this.connectSvc.get<MaritalStatus[]>('MaritalStatus', false);
     this.genders = await this.connectSvc.get<Gender[]>('Gender', false);
-    this.states = await this.connectSvc.get<State[]>('State', false);
     this.countries = await this.connectSvc.get<Country[]>('Country', false);
     const profile = await this.connectSvc.get<Profile>(`Profile/${this.id}`, true);
     this.form.setValue({
@@ -132,7 +126,7 @@ export class ProfileComponent implements OnInit {
       Address: profile.address,
       AddressExtra: profile.addressExtra,
       Suburb: profile.suburb,
-      StateId: profile.state ? profile.state.id : null,
+      State: profile.state,
       CountryId: profile.country ? profile.country.id : null,
     });
 
@@ -147,7 +141,7 @@ export class ProfileComponent implements OnInit {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
           title: 'Success',
-          message: 'Your profile has been updated',
+          message: 'The profile has been updated',
         };
         this.dialog.open(DialogComponent, dialogConfig);
       } catch (error: any) {
@@ -166,6 +160,9 @@ export class ProfileComponent implements OnInit {
     }
     if (control.hasError('maxlength')) {
       return `You must enter a value no longer than ${control?.errors?.maxlength.requiredLength} characters`;
+    }
+    if (control.hasError('validatePhoneNumber')) {
+      return 'You must enter a valid number';
     }
 
     return null;
@@ -200,7 +197,7 @@ export class ProfileComponent implements OnInit {
         this.Address.setValue(place.address);
         this.AddressExtra.setValue(null);
         this.Suburb.setValue(place.suburb);
-        this.StateId.setValue(place.stateId);
+        this.State.setValue(place.state);
         this.CountryId.setValue(place.countryId);
       } else {
         const dialogConfig = new MatDialogConfig();

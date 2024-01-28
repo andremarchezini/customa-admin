@@ -16,6 +16,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatNativeDateModule, MatRippleModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { LoadingModule } from '../../shared/loading/loading.module';
+import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 
 @NgModule({
   declarations: [EmergencyContactComponent],
@@ -38,6 +39,7 @@ import { LoadingModule } from '../../shared/loading/loading.module';
     FlexLayoutModule,
     NgxMaskModule.forRoot(),
     LoadingModule,
+    NgxMatIntlTelInputComponent,
   ],
   exports: [EmergencyContactComponent],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-AU' }],

@@ -25,13 +25,15 @@
 
         <div fxFlex="100">
           <mat-form-field>
-            <input
-              matInput
-              placeholder="Home Phone (08 XXXX XXXX)"
-              type="text"
-              [formControl]="HomePhone"
-              mask="99 9999 9999"
-            />
+            <ngx-mat-intl-tel-input
+              [preferredCountries]="['au', 'in']"
+              [enablePlaceholder]="true"
+              [enableSearch]="true"
+              name="HomePhone"
+              describedBy="phoneInput"
+              formControlName="HomePhone"
+              placeholder="Home Phone"
+            ></ngx-mat-intl-tel-input>
           </mat-form-field>
           <small *ngIf="HomePhone.invalid && HomePhone.touched" class="text-danger support-text">{{
             textFieldError(HomePhone)
@@ -40,17 +42,20 @@
 
         <div fxFlex="100">
           <mat-form-field>
-            <input
-              matInput
-              placeholder="Mobile (04X XXX XXXX)"
-              type="text"
-              [formControl]="Mobile"
-              mask="999 999 9999"
-            />
+            <ngx-mat-intl-tel-input
+              [preferredCountries]="['au', 'in']"
+              [enablePlaceholder]="true"
+              [enableSearch]="true"
+              name="Mobile"
+              describedBy="phoneInput"
+              formControlName="Mobile"
+              placeholder="Mobile"
+            ></ngx-mat-intl-tel-input>
           </mat-form-field>
-          <small *ngIf="Mobile.invalid && Mobile.touched" class="text-danger support-text">{{
-            textFieldError(Mobile)
-          }}</small>
+          <small
+          *ngIf="Mobile.invalid && Mobile.touched"
+          class="text-danger support-text"
+          >{{ textFieldError(Mobile) }}</small>
         </div>
 
         <div fxFlex="100">

@@ -104,16 +104,11 @@
           }}</small>
         </div>
         <div fxFlex="100">
-          <mat-form-field appearance="fill">
-            <mat-label>State</mat-label>
-            <mat-select [formControl]="StateId" [errorStateMatcher]="matcher">
-              <mat-option *ngFor="let stateOption of states" [value]="stateOption.id">{{
-                stateOption.name
-              }}</mat-option>
-            </mat-select>
+          <mat-form-field>
+            <input matInput placeholder="State" type="text" [formControl]="State" />
           </mat-form-field>
-          <small *ngIf="StateId.invalid && StateId.touched" class="text-danger support-text">{{
-            selectFieldError(StateId)
+          <small *ngIf="State.invalid && State.touched" class="text-danger support-text">{{
+            selectFieldError(State)
           }}</small>
         </div>
         <div fxFlex="100">
@@ -131,19 +126,19 @@
         </div>
         <div fxFlex="100">
           <mat-form-field>
-            <input
-              matInput
-              placeholder="Clinician Practice Phone Number (08 XXXX XXXX)"
-              type="text"
-              [formControl]="PracticePhone"
-              mask="99 9999 9999"
-            />
+            <ngx-mat-intl-tel-input
+              [preferredCountries]="['au', 'in']"
+              [enablePlaceholder]="true"
+              [enableSearch]="true"
+              name="PracticePhone"
+              describedBy="PracticePhone"
+              placeholder="Clinician Practice Phone Number"
+              formControlName="PracticePhone"
+            ></ngx-mat-intl-tel-input>
           </mat-form-field>
-          <small
-            *ngIf="PracticePhone.invalid && PracticePhone.touched"
-            class="text-danger support-text"
-            >{{ textFieldError(PracticePhone) }}</small
-          >
+          <small *ngIf="PracticePhone.invalid && PracticePhone.touched" class="text-danger support-text">{{
+            textFieldError(PracticePhone)
+          }}</small>
         </div>
         <div fxFlex="100">
           <mat-form-field>

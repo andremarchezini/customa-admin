@@ -1,0 +1,36 @@
+<app-loading *ngIf="loading"></app-loading>
+
+<mat-card *ngIf="!loading">
+  <mat-card-content>
+    <mat-card-title>Admin Resources</mat-card-title>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="basic-form">
+      <div fxLayout="row flex-layout">
+        <div fxFlex="100">
+          <div class="flex-center">
+            <mat-form-field>
+              <input matInput placeholder="Folder Link" type="text" [formControl]="FolderLink" />
+            </mat-form-field>
+            <a [href]="FolderLink.value" target="_blank" *ngIf="FolderLink.value"
+              ><mat-icon>open_in_new</mat-icon></a
+            >
+          </div>
+          <small
+            *ngIf="FolderLink.invalid && FolderLink.touched"
+            class="text-danger support-text"
+            >{{ textFieldError(FolderLink) }}</small
+          >
+        </div>
+        <div *ngIf="errors.length > 0" class="text-danger">
+          <ul>
+            <li *ngFor="let error of errors">
+              {{ error }}
+            </li>
+          </ul>
+        </div>
+        <div fxFlex="100">
+          <button mat-raised-button color="primary">Submit</button>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

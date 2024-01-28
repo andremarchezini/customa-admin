@@ -7,5 +7,6 @@ export interface Place {
   address: string;
   suburb: string;
   stateId: string;
+  state: string;
   countryId: string;
 }
