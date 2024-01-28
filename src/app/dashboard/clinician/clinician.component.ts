@@ -12,7 +12,6 @@ import { ConnectService } from '../../shared/connect';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 import { Clinician } from '../../shared/models/clinician';
 import { Country } from '../../shared/models/country';
-import { State } from '../../shared/models/state';
 import { filterErrors } from '../../../util';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MapsService } from '../../shared/maps/maps.service';
@@ -41,16 +40,12 @@ export class ClinicianComponent {
   Address = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(100)]);
   AddressExtra = new FormControl<null | string>(null, [Validators.maxLength(100)]);
   Suburb = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(50)]);
-  StateId = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(3)]);
-  CountryId = new FormControl({ value: 'AU', disabled: true }, [
-    Validators.required,
-    Validators.maxLength(3),
-  ]);
-  PracticePhone = new FormControl(null, [Validators.required, Validators.maxLength(11)]);
+  State = new FormControl<null | string>(null, [Validators.required]);
+  CountryId = new FormControl<null | string>(null, [Validators.required, Validators.maxLength(3)]);
+  PracticePhone = new FormControl(null, [Validators.required, Validators.maxLength(50)]);
   PracticeEmail = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
   PracticeUrl = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
 
-  states: State[] = [];
   countries: Country[] = [];
   errors: string[] = [];
   places: PlaceSearch[] = [];
@@ -75,7 +70,7 @@ export class ClinicianComponent {
       Address: this.Address,
       AddressExtra: this.AddressExtra,
       Suburb: this.Suburb,
-      StateId: this.StateId,
+      State: this.State,
       CountryId: this.CountryId,
       PracticePhone: this.PracticePhone,
       PracticeEmail: this.PracticeEmail,
@@ -84,7 +79,6 @@ export class ClinicianComponent {
   }
 
   async ngOnInit() {
-    this.states = await this.connectSvc.get<State[]>('State', false);
     this.countries = await this.connectSvc.get<Country[]>('Country', false);
     const clinician = await this.connectSvc.get<Clinician>(`Clinician/${this.id}`, true);
     this.form.setValue({
@@ -95,7 +89,7 @@ export class ClinicianComponent {
       Address: clinician.address,
       AddressExtra: clinician.addressExtra,
       Suburb: clinician.suburb,
-      StateId: clinician.state ? clinician.state.id : null,
+      State: clinician.state,
       CountryId: clinician.country ? clinician.country.id : null,
       PracticePhone: clinician.practicePhone,
       PracticeEmail: clinician.practiceEmail,
@@ -131,6 +125,9 @@ export class ClinicianComponent {
     if (control.hasError('maxlength')) {
       return `You must enter a value no longer than ${control?.errors?.maxlength.requiredLength} characters`;
     }
+    if (control.hasError('validatePhoneNumber')) {
+      return 'You must enter a valid number';
+    }
 
     return null;
   }
@@ -149,7 +146,6 @@ export class ClinicianComponent {
     const places = await this.mapsService.search(this.Address.value!);
     if (places) this.places = places;
     else this.places = [];
-    console.log(this.places);
   }
 
   async getPlace(placeId: string) {
@@ -164,7 +160,7 @@ export class ClinicianComponent {
         this.Address.setValue(place.address);
         this.AddressExtra.setValue(null);
         this.Suburb.setValue(place.suburb);
-        this.StateId.setValue(place.stateId);
+        this.State.setValue(place.state);
         this.CountryId.setValue(place.countryId);
       } else {
         const dialogConfig = new MatDialogConfig();

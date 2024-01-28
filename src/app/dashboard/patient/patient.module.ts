@@ -8,6 +8,7 @@ import { ProfileModule } from '../profile/profile.module';
 import { HealthCardModule } from '../health-card/health-card.module';
 import { ClinicianModule } from '../clinician/clinician.module';
 import { EmergencyContactModule } from '../emergency-contact/emergency-contact.module';
+import { AdminResourcesModule } from '../admin-resources/admin-resources.module';
 
 @NgModule({
   declarations: [PatientComponent],
@@ -20,6 +21,7 @@ import { EmergencyContactModule } from '../emergency-contact/emergency-contact.m
     HealthCardModule,
     ClinicianModule,
     EmergencyContactModule,
+    AdminResourcesModule
   ],
 })
 export class PatientModule {}

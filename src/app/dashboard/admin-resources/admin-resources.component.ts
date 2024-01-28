@@ -1,25 +1,21 @@
-import { EmergencyContact } from './../../shared/models/emergency-contact';
-import { ConnectService } from './../../shared/connect/connect.service';
+import { EmergencyContact } from '../../shared/models/emergency-contact';
+import { ConnectService } from '../../shared/connect/connect.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 import { filterErrors } from '../../../util';
+import { ProfileAdminResources } from 'src/app/shared/models/profile-admin-resources';
 
 @Component({
-  selector: 'app-emergency-contact',
-  templateUrl: './emergency-contact.component.html',
-  styleUrls: ['./emergency-contact.component.scss'],
+  selector: 'app-admin-resources',
+  templateUrl: './admin-resources.component.html',
+  styleUrls: ['./admin-resources.component.scss'],
 })
-export class EmergencyContactComponent implements OnInit {
+export class AdminResourcesComponent implements OnInit {
   @Input() id: number | null = null;
 
-  FirstName = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
-  LastName = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
-  HomePhone = new FormControl(null, [Validators.required, Validators.maxLength(50)]);
-  Mobile = new FormControl(null, [Validators.required, Validators.maxLength(50)]);
-  Email = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
-  RelationshipToPatient = new FormControl(null, [Validators.required, Validators.maxLength(100)]);
+  FolderLink = new FormControl(null, [Validators.maxLength(500)]);
   errors: string[] = [];
 
   public form: FormGroup;
@@ -32,40 +28,33 @@ export class EmergencyContactComponent implements OnInit {
     private dialog: MatDialog,
   ) {
     this.form = this.formBuilder.group({
-      FirstName: this.FirstName,
-      LastName: this.LastName,
-      HomePhone: this.HomePhone,
-      Mobile: this.Mobile,
-      Email: this.Email,
-      RelationshipToPatient: this.RelationshipToPatient,
+      FolderLink: this.FolderLink,
     });
   }
 
   async ngOnInit() {
-    const contact = await this.connectSvc.get<EmergencyContact>(
-      `EmergencyContact/${this.id}`,
+    const resources = await this.connectSvc.get<ProfileAdminResources>(
+      `ProfileAdminResources/${this.id}`,
       true,
     );
     this.form.setValue({
-      FirstName: contact.firstName,
-      LastName: contact.lastName,
-      HomePhone: contact.homePhone,
-      Mobile: contact.mobile,
-      Email: contact.email,
-      RelationshipToPatient: contact.relationshipToPatient,
+      FolderLink: resources.folderLink,
     });
-    console.log(this.form.value);
     this.loading = false;
   }
 
   async onSubmit() {
     if (this.form.valid) {
       try {
-        await this.connectSvc.update(`EmergencyContact/${this.id}`, this.form.getRawValue(), true);
+        await this.connectSvc.update(
+          `ProfileAdminResources/${this.id}`,
+          this.form.getRawValue(),
+          true,
+        );
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
           title: 'Success',
-          message: 'The Emergency Contact has been updated',
+          message: 'The data has been updated',
         };
         this.dialog.open(DialogComponent, dialogConfig);
       } catch (error: any) {
@@ -100,5 +89,9 @@ export class EmergencyContactComponent implements OnInit {
       return 'Your selection is invalid';
     }
     return null;
+  }
+
+  openPath() {
+    if (this.FolderLink.value) window.open(this.FolderLink.value, '_blank');
   }
 }

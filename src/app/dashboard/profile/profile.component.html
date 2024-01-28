@@ -137,53 +137,55 @@
             }}</small>
           </div>
 
-          <div fxFlex.gt-sm="calc(33%-20px)">
+          <div fxFlex.gt-sm="calc(33%-20px)" fxFlex="100">
             <mat-form-field>
-              <input
-                matInput
-                placeholder="Home Phone (08 XXXX XXXX)"
-                type="text"
-                [formControl]="HomePhone"
-                mask="99 9999 9999"
-              />
+              <ngx-mat-intl-tel-input
+                [preferredCountries]="['au', 'in']"
+                [enablePlaceholder]="true"
+                [enableSearch]="true"
+                name="HomePhone"
+                describedBy="phoneInput"
+                formControlName="HomePhone"
+                placeholder="Home Phone"
+              ></ngx-mat-intl-tel-input>
             </mat-form-field>
-            <small
-              *ngIf="HomePhone.invalid && HomePhone.touched"
-              class="text-danger support-text"
-              >{{ textFieldError(HomePhone) }}</small
-            >
-          </div>
-
-          <div fxFlex.gt-sm="calc(33%-20px)">
-            <mat-form-field>
-              <input
-                matInput
-                placeholder="Work Phone (08 XXXX XXXX)"
-                type="text"
-                [formControl]="WorkPhone"
-                mask="99 9999 9999"
-              />
-            </mat-form-field>
-            <small
-              *ngIf="WorkPhone.invalid && WorkPhone.touched"
-              class="text-danger support-text"
-              >{{ textFieldError(WorkPhone) }}</small
-            >
-          </div>
-
-          <div fxFlex.gt-sm="calc(33%-20px)">
-            <mat-form-field>
-              <input
-                matInput
-                placeholder="Mobile (04X XXX XXXX)"
-                type="text"
-                [formControl]="Mobile"
-                mask="999 999 9999"
-              />
-            </mat-form-field>
-            <small *ngIf="Mobile.invalid && Mobile.touched" class="text-danger support-text">{{
-              textFieldError(Mobile)
+            <small *ngIf="HomePhone.invalid && HomePhone.touched" class="text-danger support-text">{{
+              textFieldError(HomePhone)
             }}</small>
+          </div>
+          <div fxFlex.gt-sm="calc(33%-20px)" fxFlex="100">
+            <mat-form-field>
+              <ngx-mat-intl-tel-input
+                [preferredCountries]="['au', 'in']"
+                [enablePlaceholder]="true"
+                [enableSearch]="true"
+                name="WorkPhone"
+                describedBy="phoneInput"
+                formControlName="WorkPhone"
+                placeholder="Work Phone"
+              ></ngx-mat-intl-tel-input>
+            </mat-form-field>
+            <small *ngIf="WorkPhone.invalid && WorkPhone.touched" class="text-danger support-text">{{
+              textFieldError(WorkPhone)
+            }}</small>
+          </div>
+
+          <div fxFlex.gt-sm="calc(33%-20px)" fxFlex="100">
+            <mat-form-field>
+              <ngx-mat-intl-tel-input
+                [preferredCountries]="['au', 'in']"
+                [enablePlaceholder]="true"
+                [enableSearch]="true"
+                name="Mobile"
+                describedBy="phoneInput"
+                formControlName="Mobile"
+                placeholder="Mobile"
+              ></ngx-mat-intl-tel-input>
+            </mat-form-field>
+            <small
+            *ngIf="Mobile.invalid && Mobile.touched"
+            class="text-danger support-text"
+            >{{ textFieldError(Mobile) }}</small>
           </div>
 
           <div fxFlex="100">
@@ -231,16 +233,11 @@
           </div>
 
           <div fxFlex="100">
-            <mat-form-field appearance="fill">
-              <mat-label>State</mat-label>
-              <mat-select [formControl]="StateId" [errorStateMatcher]="matcher">
-                <mat-option *ngFor="let stateOption of states" [value]="stateOption.id">{{
-                  stateOption.name
-                }}</mat-option>
-              </mat-select>
+            <mat-form-field>
+              <input matInput placeholder="State" type="text" [formControl]="State" />
             </mat-form-field>
-            <small *ngIf="StateId.invalid && StateId.touched" class="text-danger support-text">{{
-              selectFieldError(StateId)
+            <small *ngIf="State.invalid && State.touched" class="text-danger support-text">{{
+              selectFieldError(State)
             }}</small>
           </div>
 
