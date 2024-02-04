@@ -19,6 +19,7 @@ import { filterErrors } from '../../../util';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MapsService } from '../../shared/maps/maps.service';
 import { Place, PlaceSearch } from '../../shared/models/maps';
+import { ALLOWED_COUNTRIES } from 'src/global';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -193,7 +194,7 @@ export class ProfileComponent implements OnInit {
 
   setPlace(place: Place) {
     if (place) {
-      if (place.countryId == 'AU') {
+      if (ALLOWED_COUNTRIES.indexOf(place.countryId) > -1) {
         this.Address.setValue(place.address);
         this.AddressExtra.setValue(null);
         this.Suburb.setValue(place.suburb);
