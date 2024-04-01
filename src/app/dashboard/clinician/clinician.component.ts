@@ -80,6 +80,10 @@ export class ClinicianComponent {
   }
 
   async ngOnInit() {
+    if (!this.id) {
+      this.loading = false;
+      return;
+    }
     this.countries = await this.connectSvc.get<Country[]>('Country', false);
     const clinician = await this.connectSvc.get<Clinician>(`Clinician/${this.id}`, true);
     this.form.setValue({

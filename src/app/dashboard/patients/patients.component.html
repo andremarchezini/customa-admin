@@ -2,7 +2,12 @@
 
 <mat-card *ngIf="!loading">
   <mat-card-content>
-    <mat-card-title>Patients</mat-card-title>
+    <mat-card-title
+      >Patients
+      <button mat-icon-button (click)="add()">
+        <mat-icon style="font-size: 20px">add</mat-icon>
+      </button>
+    </mat-card-title>
     <mat-form-field>
       <input matInput (keyup)="search($event)" placeholder="Search (Filter)" />
     </mat-form-field>

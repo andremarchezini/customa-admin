@@ -109,6 +109,11 @@ export class ProfileComponent implements OnInit {
     this.maritalStatuses = await this.connectSvc.get<MaritalStatus[]>('MaritalStatus', false);
     this.genders = await this.connectSvc.get<Gender[]>('Gender', false);
     this.countries = await this.connectSvc.get<Country[]>('Country', false);
+    if (!this.id) {
+      this.loading = false;
+      return;
+    }
+
     const profile = await this.connectSvc.get<Profile>(`Profile/${this.id}`, true);
     this.form.setValue({
       TitleId: profile.title.id,
@@ -137,19 +142,37 @@ export class ProfileComponent implements OnInit {
   async onSubmit() {
     this.errors = [];
     if (this.form.valid) {
-      try {
-        await this.connectSvc.update(`Profile/${this.id}`, this.form.getRawValue(), true);
-        const dialogConfig = new MatDialogConfig();
-        dialogConfig.data = {
-          title: 'Success',
-          message: 'The profile has been updated',
-        };
-        this.dialog.open(DialogComponent, dialogConfig);
-      } catch (error: any) {
-        if (error.error?.errors) {
-          filterErrors(error, this.errors);
-        } else {
-          this.connectSvc.handleError(error);
+      if (this.id) {
+        try {
+          await this.connectSvc.update(`Profile/${this.id}`, this.form.getRawValue(), true);
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.data = {
+            title: 'Success',
+            message: 'The profile has been updated',
+          };
+          this.dialog.open(DialogComponent, dialogConfig);
+        } catch (error: any) {
+          if (error.error?.errors) {
+            filterErrors(error, this.errors);
+          } else {
+            this.connectSvc.handleError(error);
+          }
+        }
+      } else {
+        try {
+          await this.connectSvc.create(`Profile`, this.form.getRawValue(), true);
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.data = {
+            title: 'Success',
+            message: 'The profile has been created',
+          };
+          this.dialog.open(DialogComponent, dialogConfig);
+        } catch (error: any) {
+          if (error.error?.errors) {
+            filterErrors(error, this.errors);
+          } else {
+            this.connectSvc.handleError(error);
+          }
         }
       }
     }
@@ -183,7 +206,6 @@ export class ProfileComponent implements OnInit {
     const places = await this.mapsService.search(this.Address.value!);
     if (places) this.places = places;
     else this.places = [];
-    console.log(this.places);
   }
 
   async getPlace(placeId: string) {

@@ -132,6 +132,10 @@ export class HealthCardComponent {
   }
 
   async ngOnInit() {
+    if (!this.id) {
+      this.loading = false;
+      return;
+    }
     this.dvaCardColours = await this.connectSvc.get<DvaCardColour[]>('DvaCardColour', false);
     this.accountTypes = await this.connectSvc.get<AccountType[]>('AccountType', false);
     const card = await this.connectSvc.get<HealthCard>(`HealthCard/${this.id}`, true);
@@ -155,7 +159,6 @@ export class HealthCardComponent {
 
   async onSubmit() {
     const value = this.form.getRawValue();
-    console.log(value);
     if (value.MedicareExpiry) value.MedicareExpiry = value.MedicareExpiry.toISOString();
 
     if (this.form.valid) {
