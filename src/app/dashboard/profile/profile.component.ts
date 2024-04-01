@@ -20,6 +20,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { MapsService } from '../../shared/maps/maps.service';
 import { Place, PlaceSearch } from '../../shared/models/maps';
 import { ALLOWED_COUNTRIES } from 'src/global';
+import { Router } from '@angular/router';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -81,6 +82,7 @@ export class ProfileComponent implements OnInit {
     private connectSvc: ConnectService,
     private dialog: MatDialog,
     private mapsService: MapsService,
+    private router: Router,
   ) {
     this.form = this.formBuilder.group({
       TitleId: this.TitleId,
@@ -109,6 +111,11 @@ export class ProfileComponent implements OnInit {
     this.maritalStatuses = await this.connectSvc.get<MaritalStatus[]>('MaritalStatus', false);
     this.genders = await this.connectSvc.get<Gender[]>('Gender', false);
     this.countries = await this.connectSvc.get<Country[]>('Country', false);
+    if (!this.id) {
+      this.loading = false;
+      return;
+    }
+
     const profile = await this.connectSvc.get<Profile>(`Profile/${this.id}`, true);
     this.form.setValue({
       TitleId: profile.title.id,
@@ -137,19 +144,38 @@ export class ProfileComponent implements OnInit {
   async onSubmit() {
     this.errors = [];
     if (this.form.valid) {
-      try {
-        await this.connectSvc.update(`Profile/${this.id}`, this.form.getRawValue(), true);
-        const dialogConfig = new MatDialogConfig();
-        dialogConfig.data = {
-          title: 'Success',
-          message: 'The profile has been updated',
-        };
-        this.dialog.open(DialogComponent, dialogConfig);
-      } catch (error: any) {
-        if (error.error?.errors) {
-          filterErrors(error, this.errors);
-        } else {
-          this.connectSvc.handleError(error);
+      if (this.id) {
+        try {
+          await this.connectSvc.update(`Profile/${this.id}`, this.form.getRawValue(), true);
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.data = {
+            title: 'Success',
+            message: 'The profile has been updated',
+          };
+          this.dialog.open(DialogComponent, dialogConfig);
+        } catch (error: any) {
+          if (error.error?.errors) {
+            filterErrors(error, this.errors);
+          } else {
+            this.connectSvc.handleError(error);
+          }
+        }
+      } else {
+        try {
+          var response = await this.connectSvc.create<Profile>(`Profile`, this.form.getRawValue(), true);
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.data = {
+            title: 'Success',
+            message: 'The profile has been created',
+          };
+          this.dialog.open(DialogComponent, dialogConfig);
+          this.router.navigateByUrl(`dashboard/patient/${response.id}`);
+        } catch (error: any) {
+          if (error.error?.errors) {
+            filterErrors(error, this.errors);
+          } else {
+            this.connectSvc.handleError(error);
+          }
         }
       }
     }
@@ -183,7 +209,6 @@ export class ProfileComponent implements OnInit {
     const places = await this.mapsService.search(this.Address.value!);
     if (places) this.places = places;
     else this.places = [];
-    console.log(this.places);
   }
 
   async getPlace(placeId: string) {

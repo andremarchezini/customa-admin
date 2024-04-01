@@ -14,8 +14,7 @@ export class PatientComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
-      console.log(params);
-      this.id = params.id;
+      if (params.id) this.id = params.id;
       this.loading = false;
     });
   }

@@ -33,6 +33,10 @@ export class AdminResourcesComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.id) {
+      this.loading = false;
+      return;
+    }
     const resources = await this.connectSvc.get<ProfileAdminResources>(
       `ProfileAdminResources/${this.id}`,
       true,

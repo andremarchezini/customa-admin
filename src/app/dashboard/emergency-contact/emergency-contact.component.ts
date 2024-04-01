@@ -42,6 +42,10 @@ export class EmergencyContactComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.id) {
+      this.loading = false;
+      return;
+    }
     const contact = await this.connectSvc.get<EmergencyContact>(
       `EmergencyContact/${this.id}`,
       true,
@@ -54,7 +58,6 @@ export class EmergencyContactComponent implements OnInit {
       Email: contact.email,
       RelationshipToPatient: contact.relationshipToPatient,
     });
-    console.log(this.form.value);
     this.loading = false;
   }
 

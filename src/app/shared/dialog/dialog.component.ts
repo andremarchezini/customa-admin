@@ -10,6 +10,5 @@ export class DialogComponent {
   data: any = {};
   constructor(@Inject(MAT_DIALOG_DATA) data: any) {
     this.data = data;
-    console.log(data);
   }
 }

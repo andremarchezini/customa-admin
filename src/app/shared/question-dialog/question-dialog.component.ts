@@ -14,7 +14,6 @@ export class QuestionDialogComponent {
     private dialogRef: MatDialogRef<QuestionDialogComponent>,
   ) {
     this.data = data;
-    console.log(data);
   }
 
   accept() {

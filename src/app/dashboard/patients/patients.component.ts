@@ -67,4 +67,8 @@ export class PatientsComponent implements OnInit {
   open(patient: Patient) {
     this.router.navigateByUrl(`dashboard/patient/${patient.id}`);
   }
+
+  add(){
+      this.router.navigateByUrl(`dashboard/patient/add`);
+  }
 }

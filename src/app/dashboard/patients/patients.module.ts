@@ -10,6 +10,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import {  MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [PatientsComponent],
@@ -25,6 +27,8 @@ import { MatInputModule } from '@angular/material/input';
     MatInputModule,
     MatTableModule,
     MatPaginatorModule,
+    MatIconModule,
+    MatButtonModule
   ],
 })
 export class PatientsModule {}
