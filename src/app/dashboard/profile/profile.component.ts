@@ -20,6 +20,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { MapsService } from '../../shared/maps/maps.service';
 import { Place, PlaceSearch } from '../../shared/models/maps';
 import { ALLOWED_COUNTRIES } from 'src/global';
+import { Router } from '@angular/router';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -81,6 +82,7 @@ export class ProfileComponent implements OnInit {
     private connectSvc: ConnectService,
     private dialog: MatDialog,
     private mapsService: MapsService,
+    private router: Router,
   ) {
     this.form = this.formBuilder.group({
       TitleId: this.TitleId,
@@ -160,13 +162,14 @@ export class ProfileComponent implements OnInit {
         }
       } else {
         try {
-          await this.connectSvc.create(`Profile`, this.form.getRawValue(), true);
+          var response = await this.connectSvc.create<Profile>(`Profile`, this.form.getRawValue(), true);
           const dialogConfig = new MatDialogConfig();
           dialogConfig.data = {
             title: 'Success',
             message: 'The profile has been created',
           };
           this.dialog.open(DialogComponent, dialogConfig);
+          this.router.navigateByUrl(`dashboard/patient/${response.id}`);
         } catch (error: any) {
           if (error.error?.errors) {
             filterErrors(error, this.errors);
